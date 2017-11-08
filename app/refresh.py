@@ -1,4 +1,4 @@
-from app.manager_ui import cpu_load, CPU_THRE_H, CPU_THRE_L, RATIO_GROW, RATIO_SHRINK
+from app.manager_ui import cpu_load, get_global
 from flask import render_template, redirect, url_for, request, g
 from app import config
 from app import webapp
@@ -13,10 +13,7 @@ from apscheduler.triggers.interval import IntervalTrigger
 @webapp.route('/auto_refresh')
 def auto_refresh():
     # global MAIN_MSG
-    cpu_threshold_high = CPU_THRE_H
-    cpu_threshold_low = CPU_THRE_L
-    ratio_grow = RATIO_GROW
-    ratio_shrink = RATIO_SHRINK
+    cpu_threshold_high, cpu_threshold_low, ratio_grow, ratio_shrink= get_global()
     response=None
     # create connection to ec2 worker pool
     ec2 = boto3.resource('ec2')
@@ -74,6 +71,7 @@ def auto_refresh():
             # MAIN_MSG = 'Automatically shrank the worker pool by ratio ' + str(ratio_shrink)
     #return redirect(url_for('main'))
     print(response)
+    print(cpu_threshold_high, cpu_threshold_low, ratio_grow, ratio_shrink)
     return response
 
 # if __name__ == '__main__':

@@ -56,6 +56,10 @@ def teardown_db(exception):
         db.close()
 
 
+def get_global():
+    return CPU_THRE_H, CPU_THRE_L, RATIO_GROW, RATIO_SHRINK
+
+
 @webapp.route('/worker_list/add_one', methods=['POST'])
 # Grow the worker pool by one
 def grow_by_one():
