@@ -4,6 +4,7 @@ from app import config
 from app import webapp
 import boto3
 import math
+import time
 
 import atexit
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -46,6 +47,7 @@ def auto_refresh():
             new_ids = []
             for new_worker in new_instances:
                 new_ids.append({'InstanceId':new_worker.id})
+            time.sleep(1)
             elb = boto3.client('elb')
             response = elb.register_instances_with_load_balancer(
                 LoadBalancerName=config.elbname,

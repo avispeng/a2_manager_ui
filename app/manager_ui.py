@@ -2,6 +2,7 @@ from flask import render_template, redirect, url_for, request, g
 from app import webapp
 
 import boto3
+import time
 # import math
 from app import config
 from datetime import datetime, timedelta
@@ -76,6 +77,9 @@ def grow_by_one():
                          IamInstanceProfile = config.iam_instance_profile,
                          TagSpecifications = config.tag_specification
                          )
+    time.sleep(1)
+    # sometimes new instances can't connect to elb right after launching
+    # so give aws 1 sec to process
     # attach it to load balancer
     elb = boto3.client('elb')
     response = elb.register_instances_with_load_balancer(
