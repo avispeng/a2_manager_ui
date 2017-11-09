@@ -1,7 +1,7 @@
-ami_id = 'ami-2f4af755'
+ami_id = 'ami-da8b3da0'
 instance_type = 't2.small'
 key_name = 'A1_Web_Development'
-security_group = ['sg-afbb7edd']
+security_group = ['sg-c3cb97b1']
 elbname = 'ece1779lb'
 iam_instance_profile = {'Arn':'arn:aws:iam::770147457029:instance-profile/a2worker'}
 # 'Name':'a2worker'
