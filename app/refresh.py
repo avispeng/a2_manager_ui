@@ -1,7 +1,5 @@
 from app.manager_ui import cpu_load, get_global
 
-
-from flask import render_template, redirect, url_for, request, g
 from app import config
 from app import webapp
 import boto3
@@ -15,34 +13,23 @@ from apscheduler.triggers.interval import IntervalTrigger
 
 @webapp.route('/auto_refresh')
 def auto_refresh():
-    # global MAIN_MSG
 
     cpu_threshold_high, cpu_threshold_low, ratio_grow, ratio_shrink= get_global()
-
-    # cpu_threshold_high = CPU_THRE_H
-    # cpu_threshold_low = CPU_THRE_L
-    # ratio_grow = RATIO_GROW
-    # ratio_shrink = RATIO_SHRINK
-
-
     response=None
     # create connection to ec2 worker pool
     ec2 = boto3.resource('ec2')
     # list a list of instances named 'worker'
-
-    filter_worker_tag = [{'Name': 'tag:worker', 'Values': ['vpc_worker_tag']},
-                    ]
-    workers = ec2.instances.filter(Filters=filter_worker_tag)
-    # workers = ec2.instances.filter(Filters=[{'Name': 'tag:Name', 'Values': ['worker']},
-    #                                         {'Name': 'instance-state-name',
-    #                                          'Values': ['running']}])
-
+    workers = ec2.instances.filter(Filters=[{'Name': 'tag:Name', 'Values': ['worker']},
+                                            {'Name': 'instance-state-name',
+                                             'Values': ['running']}])
     cpu_sum = 0
     count = 0
+    average_current = (cpu_threshold_low + cpu_threshold_high) / 2
     for instance in workers:
         cpu_sum += cpu_load(instance.id)[0]
         count += 1
-    average_current = cpu_sum / count
+    if count > 0:
+        average_current = cpu_sum / count
     if average_current >= cpu_threshold_high:
         num_to_grow = math.floor(ratio_grow * count - count)
         if num_to_grow > 0:
@@ -89,8 +76,8 @@ def auto_refresh():
             elb = boto3.client('elb')
             delete_ids = []
             for worker in workers:
-                worker.terminate()
                 delete_ids.append({'InstanceId': worker.id})
+                worker.terminate()
                 num_to_shrink -= 1
                 if num_to_shrink == 0:
                     break
