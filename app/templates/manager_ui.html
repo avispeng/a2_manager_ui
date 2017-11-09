@@ -3,44 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ title }}</title>
+
 </head>
-<body>
+<body style="background-color:powderblue;">
 <h1><center>Welcome to Manager UI</center></h1>
-    <div>
-    <form action="{{url_for('grow_by_one')}}" method="post" style ="float: left; padding: 20px;"  >
+    <div style="padding:20px">
+        <center>
+    <form action="{{url_for('grow_by_one')}}" method="post"  >
         <input type="submit" value="Grow by one" class="t1" >
     </form>
-
-    <form action="{{url_for('shrink_by_one')}}" method="post" style ="float: left; padding: 20px;" >
+    <form action="{{url_for('shrink_by_one')}}" method="post" >
         <input type="submit" value="Shrink by one" class="t1">
     </form>
+        </center>
     </div>
     <br>
 
-    <div>
-
-    <table>
+    <div style="padding:20px; width: 100%">
+        <center>
+    <table class="tlist" cellspacing="10">
         <thead>
-        <th>ID</th>
-        <th>Type</th>
-        <th>Availability Zone</th>
-        <th>Status</th>
-        <th>CPU utilization</th>
+        <th align=left style="width:20%">ID</th>
+        <th align=left style="width:20%">Type</th>
+        <th  align=left style="width:20%">Availability Zone</th>
+        <th  align=left style="width:20%">Status</th>
+        <th  align=left style="width:20%">CPU utilization</th>
         </thead>
+
         {% for instance,ins_cpu in instances_cpu %}
             <tr>
-                <td>{{ instance.id }}</td>
-                <td>{{ instance.instance_type }}</td>
-                <td>{{ instance.placement['AvailabilityZone'] }}</td>
-                <td>{{ instance.state['Name'] }}</td>
-                <td><a href="{{url_for('cpu_plot', id=instance.id)}}">{{ ins_cpu }}</a></td>
+                <td  align=left style="width:20%">{{ instance.id }}</td>
+                <td  align=left style="width:20%">{{ instance.instance_type }}</td>
+                <td  align=left style="width:20%">{{ instance.placement['AvailabilityZone'] }}</td>
+                <td  align=left style="width:20%">{{ instance.state['Name'] }}</td>
+                <td  align=left style="width:20%"><a href="{{url_for('cpu_plot', id=instance.id)}}">
+                    {{ ins_cpu }}</a></td>
             </tr>
         {% endfor %}
+
     </table>
+            </center>
     <br>
-    <form action="{{url_for('tune')}}" method="post">
-        <fieldset style="width:50%;">
-            <legend>Tune the threshold and ratio:</legend>
+    <form action="{{url_for('tune')}}" method="post" style="width:100%" input type="ratio_form">
+        <center>
+        <fieldset style="width:65%;">
+            <legend><h3>Tune the threshold and ratio:</h3></legend>
             CPU utilization (average percent) threshold for growing the pool:<br>
             <input type="number" max="100" min="0" name="thre_h" value="{{cur[0]}}">(0~100)%<br>
             CPU utilization (average percent) threshold for shrinking the pool:<br>
@@ -51,22 +58,39 @@
             <input type="number" min="1" name="ratio_shrink" step="0.01" value="{{cur[3]}}"><br>
             <input type="submit" value="Set">
         </fieldset>
+        </center>
     </form>
+
+    <center>
     <form action="{{url_for('delete_all')}}" method="post"
           onsubmit="return confirm('Delete user data and images?');">
         Delete everything including users and photos' info in database and files on S3:
         <input type="submit" value="Delete all data">
     </form>
+    </center>
     </div>
-
     <p id="delete_msg" style="color:blue;">{{msg if msg != None}}</p>
-
-
 
 </body>
 </html>
 
 <style>
+table.tlist{
+    border: 1px solid black
+    border-collapse: separate;
+    border-spacing: 10px;
+    *border-collapse: expression('separate', cellSpacing = '10px');
+}
+
+input[type=number], select {
+    width: 30%;
+    padding: 12px 12px;
+    margin: 10px 20;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
 
 
 input[type=submit] {
@@ -77,9 +101,22 @@ input[type=submit] {
     text-decoration: none;
     margin: 4px 2px;
     cursor: pointer;
+    width: 200px
+}
+
+input[type=ratio_form] {
+    color: #fff;
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-decoration: none;
+    margin: 4px 2px;
+    cursor: pointer;
+    width: 200px
 }
 
 input[type=submit]:hover{
-    background: lightblue;
+    background: black;
+
 
 </style>
