@@ -5,13 +5,20 @@
     <title>{{ title }}</title>
 </head>
 <body>
-    <h1>Welcome to Manager UI</h1>
-    <form action="{{url_for('grow_by_one')}}" method="post" style="display:inline-block;">
-        <input type="submit" value="Grow by one">
-    </form>&nbsp;
-    <form action="{{url_for('shrink_by_one')}}" method="post" style="display:inline-block;">
-        <input type="submit" value="Shrink by one">
-    </form><br><br>
+<h1><center>Welcome to Manager UI</center></h1>
+    <div>
+    <form action="{{url_for('grow_by_one')}}" method="post" style ="float: left; padding: 20px;"  >
+        <input type="submit" value="Grow by one" class="t1" >
+    </form>
+
+    <form action="{{url_for('shrink_by_one')}}" method="post" style ="float: left; padding: 20px;" >
+        <input type="submit" value="Shrink by one" class="t1">
+    </form>
+    </div>
+    <br>
+
+    <div>
+
     <table>
         <thead>
         <th>ID</th>
@@ -50,7 +57,29 @@
         Delete everything including users and photos' info in database and files on S3:
         <input type="submit" value="Delete all data">
     </form>
+    </div>
+
     <p id="delete_msg" style="color:blue;">{{msg if msg != None}}</p>
+
+
 
 </body>
 </html>
+
+<style>
+
+
+input[type=submit] {
+    color: #fff;
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-decoration: none;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+input[type=submit]:hover{
+    background: lightblue;
+
+</style>
