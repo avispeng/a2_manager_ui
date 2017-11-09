@@ -6,9 +6,10 @@
     <script type="text/javascript" src="{{ url_for('static', filename='flot/jquery.flot.js') }}"></script>
     <title>{{ title }}</title>
 </head>
-<body>
+<body style="background-color:powderblue;">
+    <center>
     <h1>CPU Utilization Plot</h1>
-    <div id="cpu_plot" style="width:300px;height:150px;"></div>
+    <div id="cpu_plot" style="width:600px;height:300px;"></div>
     <form action="{{url_for('main')}}" method='get'>
         <input type='submit' value='Back'/>
     </form>
@@ -23,6 +24,7 @@
 
         $.plot($("#cpu_plot"), [ {{ cpu_stats }} ] , options);
     </script>
+    </center>
 </body>
 </html>
 
@@ -34,4 +36,19 @@ body.frontcover {
     background-repeat: repeat-y;        /*repeat-x, repeat-y*/
     background-position: right;
 }
+
+input[type=submit] {
+    color: #fff;
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-decoration: none;
+    margin: 4px 2px;
+    cursor: pointer;
+    width: 200px
+}
+
+input[type=submit]:hover{
+    background: black;
+
 </style>
