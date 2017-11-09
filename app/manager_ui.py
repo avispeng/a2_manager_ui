@@ -78,13 +78,14 @@ def grow_by_one():
                          TagSpecifications = config.tag_specification
                          )
     # exp backoff
+    ec2_client = boto3.client('ec2')
     wait = 1
     while wait <= 30:
         try:
-            response = ec2.describe_instances(InstanceIds=[new_instance[0].id])
-            print(response)
+            response = ec2_client.describe_instances(InstanceIds=[new_instance[0].id])
+            # print(response)
             break
-        except:
+        except Exception:
             time.sleep(wait)
             wait += 1
             continue
