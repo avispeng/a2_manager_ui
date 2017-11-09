@@ -43,11 +43,24 @@ def auto_refresh():
                                                 IamInstanceProfile=config.iam_instance_profile,
                                                 TagSpecifications=config.tag_specification
                                                 )
-            # attach them to load balancer
+            # collect their ids
             new_ids = []
             for new_worker in new_instances:
                 new_ids.append({'InstanceId':new_worker.id})
-            time.sleep(1)
+
+            # exp backoff
+            wait = 1
+            while wait <= 30:
+                try:
+                    response = ec2.describe_instances(InstanceIds=new_ids)
+                    print(response)
+                    break
+                except:
+                    time.sleep(wait)
+                    wait += 1
+                    continue
+
+            # attach them to load balancer
             elb = boto3.client('elb')
             response = elb.register_instances_with_load_balancer(
                 LoadBalancerName=config.elbname,
