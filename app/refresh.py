@@ -53,12 +53,13 @@ def auto_refresh():
             # exp backoff
             ec2_client = boto3.client('ec2')
             wait = 1
-            while wait <= 30:
+            while wait <= 10:
                 try:
                     response = ec2_client.describe_instances(InstanceIds=new_ids)
-                    # print(response)
+                    print(response)
                     break
                 except Exception:
+                    print("wait for",wait,"s")
                     time.sleep(wait)
                     wait += 1
                     continue
