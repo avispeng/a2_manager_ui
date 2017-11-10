@@ -47,16 +47,18 @@ def auto_refresh():
                                                 )
             # collect their ids
             new_ids = []
+            ids_desc = []
             for new_worker in new_instances:
                 new_ids.append({'InstanceId':new_worker.id})
+                ids_desc.append(new_worker.id)
 
             # exp backoff
             ec2_client = boto3.client('ec2')
             wait = 1
             while wait <= 10:
                 try:
-                    response = ec2_client.describe_instances(InstanceIds=new_ids)
-                    print(response)
+                    response = ec2_client.describe_instances(InstanceIds=ids_desc)
+                    print("described")
                     break
                 except Exception:
                     print("wait for",wait,"s")

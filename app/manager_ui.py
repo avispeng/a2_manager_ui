@@ -83,7 +83,7 @@ def grow_by_one():
     while wait <= 10:
         try:
             response = ec2_client.describe_instances(InstanceIds=[new_instance[0].id])
-            print(response)
+            print("described")
             break
         except Exception:
             print("wait for ", wait, "s")
